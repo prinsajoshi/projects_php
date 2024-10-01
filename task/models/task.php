@@ -9,14 +9,19 @@ class TaskModel
         $this->conn = $db;
     }
 
-    public function insert($title, $description = null)
+    public function insert($title, $description )
     {
         $stmt = $this->conn->prepare("INSERT INTO task(title,description) values(?,?)");
-        $stmt->bind_param("ss", "$title", $description);
+        $description = $description ?? ''; 
+        $stmt->bind_param("ss", $title, $description);
         if ($stmt->execute()) {
             $data = $this->getTaskByTitle($title);
-            return ["status" => True, "payload" => $data["payload"]];
+            if ($data && $data["status"]){
+            return ["status" => true, "payload" => $data["payload"]];
+            }
         }
+        return ["status"=>true];
+        
     }
 
     public function getTaskByTitle($title)
@@ -28,7 +33,7 @@ class TaskModel
         if ($task) {
             return ["status" => true, "payload" => $task];
         }
-        return false;
+        return ["status"=>false];
     }
 
     public function getAllTask()
@@ -36,6 +41,7 @@ class TaskModel
         $stmt = $this->conn->prepare("SELECT * FROM task");
         $stmt->execute();
         $result = $stmt->get_result();
+        $task=[];
         while ($row = $result->fetch_assoc()) {
             $task[] = $row;
         }
@@ -56,6 +62,7 @@ class TaskModel
     public function updateTask($id, $title, $description)
     {
         $stmt = $this->conn->prepare("UPDATE task SET title=?, description=? WHERE id=?");
+        $description = $description ?? ''; 
         $stmt->bind_param("ssi", $title, $description, $id);
         if ($stmt->execute()) {
             $data = $this->getTaskByTitle($title);

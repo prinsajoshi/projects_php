@@ -9,16 +9,17 @@ class TaskController
         $this->model = $model;
     }
 
-    public function createPost($data)
+    public function createTask($data)
     {
-        if (isset($data["title"]) || isset($data["title"], $data["description"])) {
+        if (isset($data["title"])) {
             $sucess = $this->model->getTaskByTitle($data["title"]);
             if ($sucess["status"]) {
                 return ["status" => false, "message" => "title already exit"];
             }
-            return $this->model->insert($data["title"], $data["description"]);
+            return $this->model->insert($data["title"], $data["description"]?? null);
+        }else{
+            return ["status" => false, "message" => "title is not set"];
         }
-        return ["status" => false, "message" => "title is not set"];
     }
 
     public function getTask($data)
@@ -32,7 +33,7 @@ class TaskController
     public function updateTask($data)
     {
         if (isset($data["id"], $data["title"]) || isset($data["id"], $data["title"], $data["description"])) {
-            return $this->model->updateTask($data["id"], $data["title"], $data["description"]);
+            return $this->model->updateTask($data["id"], $data["title"], $data["description"]?? null);
         }
         return ["status" => false, "message" => "title and id is not set for update"];
     }
