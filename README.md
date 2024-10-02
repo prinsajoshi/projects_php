@@ -14,3 +14,12 @@ Logic:</br>
 Database Setup: Create a tasks table with fields: id, title, description.</br>
 Duplicate Validation: When adding a task, check if the title already exists. If yes, return an error message.</br>
 CRUD Operations: Use core PHP functions to handle adding, editing, deleting, and displaying tasks.</br>
+
+
+<h1>Session-based Shopping Cart</h1>
+Problem: Build a shopping cart system where users can add, view, and remove products from a cart. The products will have name, price, and quantity. Store the cart data using sessions.</br>
+
+Features:</br>
+Add products to the cart via JSON (name, price, quantity)</br>
+View cart: List all products in the cart</br>
+Remove a product by its id</br>
